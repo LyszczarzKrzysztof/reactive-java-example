@@ -1,7 +1,10 @@
 package com.example.reactivejavaexample.rxjava;
 
-import rx.Observable;
-import rx.Observer;
+
+
+import io.reactivex.Observable;
+import io.reactivex.Observer;
+import io.reactivex.disposables.Disposable;
 
 import java.io.IOException;
 import java.util.concurrent.ExecutorService;
@@ -18,14 +21,22 @@ public class Worker {
 
     public static void main(String[] args) {
         Observer<String> stringObserver = new Observer<String>() {
-            @Override
-            public void onCompleted() {
-                System.out.println("Finish!");
-            }
 
             @Override
             public void onError(Throwable throwable) {
 
+            }
+
+            @Override
+            public void onComplete() {
+                System.out.println("Finish!");
+            }
+
+
+
+            @Override
+            public void onSubscribe(Disposable disposable) {
+                System.out.println("Rozpoczęcie pracy");
             }
 
             int i = 0;
@@ -49,7 +60,7 @@ public class Worker {
             }
         };
 
-        Observable.from(url).subscribe(stringObserver); // połaczenie tablicy url (musi być statyczna bo main jest statyczny)
+        Observable.fromArray(url).subscribe(stringObserver); // połaczenie tablicy url (musi być statyczna bo main jest statyczny)
                                                         // z observerem tzw subskrybcja
                                                         // tu już chyba czuje że tablica i się iteruje bez użycia petli
     }
